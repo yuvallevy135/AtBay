@@ -54,7 +54,6 @@ async def create_tasks_message_q(host, queue_name):
         # Cancel consuming after __aexit__
         async for message in queue_iter:
             async with message.process():
-                # print(message.body.decode())
                 await process_task(channel, message.body, STATUS_QUEUE)
                 if queue.name in message.body.decode():
                     break

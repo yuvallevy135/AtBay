@@ -44,11 +44,8 @@ async def add_task_status_to_cache(body):
     data = body
     data_decode = data.decode()
     data_json = json.loads(data_decode)
-    # print(data_json)
     unique_id = data_json["unique_id"]
-    # print(unique_id)
     status = data_json["status"]
-    # print(status)
 
     # add the unique id of task and its status to cache.
     my_cache[unique_id] = {"status": status, "time": datetime.datetime.now()}
@@ -68,7 +65,6 @@ async def create_status_message_q(host):
         # Cancel consuming after __aexit__
         async for message in queue_iter:
             async with message.process():
-                # print(message.body.decode())
                 await add_task_status_to_cache(message.body)
                 if queue.name in message.body.decode():
                     break

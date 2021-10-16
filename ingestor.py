@@ -1,3 +1,4 @@
+import uuid
 from datetime import datetime
 from aio_pika import Message, connect
 from fastapi import FastAPI
@@ -23,7 +24,7 @@ async def write_to_queue(channel, queue_name, message):
 async def ingests():
     # params
     # create unique id
-    unique_id = "client_" + str(datetime.now())
+    unique_id = str(uuid.uuid4())
     print("Ingestor: Received task %r from client" % unique_id)
 
     # connect to status queue
@@ -39,7 +40,6 @@ async def ingests():
     await write_to_queue(channel, TASK_QUEUE, unique_id)
 
     return JSONResponse(status_code=200, content="Your unique_id is: " + unique_id)
-    # return channel
 
 
 if __name__ == "__main__":
