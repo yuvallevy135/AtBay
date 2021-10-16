@@ -2,8 +2,8 @@
 
 To run the project you need to have:
 
-OTP 24.1 Windows 64-bit Binary File –: https://www.erlang.org/downloads - erlang
-rabbitmq-server-3.9.7.exe –: https://www.rabbitmq.com/install-windows.html - rabbitmq
+erlang: OTP 24.1 Windows 64-bit Binary File –: https://www.erlang.org/downloads
+rabbitmq: rabbitmq-server-3.9.7.exe –: https://www.rabbitmq.com/install-windows.html
 
 
 steps:
