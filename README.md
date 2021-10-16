@@ -16,8 +16,8 @@ steps:
 status.py will run on: http://127.0.0.1:7000/
 ingestor.py will run on http://127.0.0.1:8000/
 
-send empty string to ingestor to "send a task to process" like: http://127.0.0.1:8000/
-send unique_id that got from ingestor to http://127.0.0.1:8000/status/{unique_id} to get task status
+send empty string to ingestor to "send a task to process" like: http://127.0.0.1:8000/ingests/
+send unique_id that got from ingestor to http://127.0.0.1:7000/status/{unique_id} to get task status
 
 notice:
 instead of minutes I used seconds - to make it easier.
