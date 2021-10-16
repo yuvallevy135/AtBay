@@ -22,7 +22,8 @@ send unique_id that got from ingestor to http://127.0.0.1:8000/status/{unique_id
 notice:
 instead of minutes I used seconds - to make it easier.
 task that got an error will be task that will take more than 8 seconds to process (i used random for that).
-task will become be deleted from cache after 20 minutes and become "not found"
+I used dict as cache to save the unique_id with status and time when the task was saved in cache.
+task will become be deleted from cache after 20 minutes and become "not found".
 
 
 
