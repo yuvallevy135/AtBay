@@ -11,8 +11,8 @@ app = FastAPI()
 my_cache = dict()
 
 STATUS_QUEUE = "tasks_status"
-
-
+REMOVE_FROM_CACHE = 20
+CHECK_CACHE = 5
 # before app runs, we want to start listening to the status message_q
 @app.on_event("startup")
 async def startup_event():
@@ -23,10 +23,10 @@ async def startup_event():
 # looping over cache every 5 seconds to delete all tasks that have been saved over 20 seconds
 async def clear_dated_statuses():
     while True:
-        await asyncio.sleep(5)
+        await asyncio.sleep(CHECK_CACHE)
         # loop over the cache and delete tasks that have been saved over 20 seconds.
         for key in list(my_cache.keys()):
-            if datetime.datetime.now() > my_cache[key]["time"] + datetime.timedelta(seconds=20):
+            if datetime.datetime.now() > my_cache[key]["time"] + datetime.timedelta(seconds=REMOVE_FROM_CACHE):
                 my_cache.pop(key)
 
 
