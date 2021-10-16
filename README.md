@@ -20,8 +20,9 @@ send empty string to ingestor to "send a task to process" like: http://127.0.0.1
 send unique_id that got from ingestor to http://127.0.0.1:8000/status/{unique_id} to get task status
 
 notice:
-instead of minutes i used seconds - to make it easier.
+instead of minutes I used seconds - to make it easier.
 task that got an error will be task that will take more than 8 seconds to process (i used random for that).
+task will become be deleted from cache after 20 minutes and become "not found"
 
 
 
