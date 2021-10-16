@@ -5,11 +5,12 @@ from aio_pika import connect
 from fastapi import FastAPI
 import uvicorn
 import json
+from fastapi.responses import JSONResponse
 
 app = FastAPI()
 my_cache = dict()
 
-STATUS_QUEUE = "status_queue_name"
+STATUS_QUEUE = "tasks_status"
 
 
 # before app runs, we want to start listening to the status message_q
@@ -32,15 +33,13 @@ async def clear_dated_statuses():
 # get the status of the task according to its unique id
 @app.get('/status/{unique_id}')
 def get_status(unique_id: str):
-    if len(my_cache) == 0:
-        return "Not Found"
-    if unique_id not in my_cache:
-        return "Not Found"
-    return my_cache[unique_id]["status"]
+    if len(my_cache) == 0 or unique_id not in my_cache:
+        return JSONResponse(status_code=404, content="Not Found")
+    return JSONResponse(status_code=200, content=my_cache[unique_id]["status"])
 
 
 # a call back to do after reading task from status message_q
-async def call_back(body):
+async def add_task_status_to_cache(body):
     # read the text.
     data = body
     data_decode = data.decode()
@@ -70,7 +69,7 @@ async def create_status_message_q(host):
         async for message in queue_iter:
             async with message.process():
                 # print(message.body.decode())
-                await call_back(message.body)
+                await add_task_status_to_cache(message.body)
                 if queue.name in message.body.decode():
                     break
     await connection.close()

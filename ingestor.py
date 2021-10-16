@@ -3,15 +3,24 @@ from aio_pika import Message, connect
 from fastapi import FastAPI
 import uvicorn
 import json
+from fastapi.responses import JSONResponse
 
 app = FastAPI()
 HOST = "localhost"
 TASK_QUEUE = "send_tasks"
-STATUS_QUEUE = "status_queue_name"
+STATUS_QUEUE = "tasks_status"
+
+
+async def write_to_queue(channel, queue_name, message):
+    await channel.default_exchange.publish(
+        Message(body=message.encode()),
+        routing_key=queue_name,
+    )
+
 
 # send to the ingestor a task to start processing.
-@app.get("/")
-async def create_channel():
+@app.get("/ingests")
+async def ingests():
     # params
     # create unique id
     unique_id = "client_" + str(datetime.now())
@@ -24,25 +33,12 @@ async def create_channel():
     # write status "Accepted" to status queue
     task_status = {"unique_id": unique_id,
                    "status": "Accepted"}
-    await channel.default_exchange.publish(
-        Message(body=json.dumps(task_status).encode()),
-        routing_key=STATUS_QUEUE,
-    )
+    await write_to_queue(channel, STATUS_QUEUE, json.dumps(task_status))
 
     # connect to task queue send the task id
-    connection = await connect(
-        host=HOST
-    )
-    channel = await connection.channel()
-    # print("before sleep " + str(unique_id))
-    # await asyncio.sleep(5)
-    await channel.default_exchange.publish(
-        Message(body=str(unique_id).encode()),
-        routing_key=TASK_QUEUE,
-    )
-    # print("after sleep " + str(unique_id))
-    # print("Ingestor: Sent task %r to processor" % unique_id)
-    return "Your unique_id is: " + unique_id
+    await write_to_queue(channel, TASK_QUEUE, unique_id)
+
+    return JSONResponse(status_code=200, content="Your unique_id is: " + unique_id)
     # return channel
 
 
