@@ -41,8 +41,8 @@ async def create_channel():
         routing_key=TASK_QUEUE,
     )
     # print("after sleep " + str(unique_id))
-    print("Ingestor: Sent task %r to processor" % unique_id)
-    return unique_id
+    # print("Ingestor: Sent task %r to processor" % unique_id)
+    return "Your unique_id is: " + unique_id
     # return channel
 
 

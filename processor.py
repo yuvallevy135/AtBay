@@ -35,7 +35,7 @@ class Processor:
         # write status "Complete" or "Error" to status queue for task with its id
         task_status = {"unique_id": unique_id,
                        "status": status}
-        print("Processor: Received task from producer %r" % unique_id)
+        print("Processor: sends task %r to status queue" % unique_id)
         await channel.default_exchange.publish(
             Message(body=json.dumps(task_status).encode()),
             routing_key=queue_name,
