@@ -8,9 +8,9 @@ To run the project you need to have:
 
 
 steps:
-1. run file: python processor.py 
-2. run file: python status.py 
-3. run file: python ingestor.py 
+1. open terminal and run file: python processor.py 
+2. open terminal and run file: python status.py 
+3. open terminal and run file: python ingestor.py 
 
 
 status.py will run on: http://127.0.0.1:7000/
